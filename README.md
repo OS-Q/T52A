@@ -9,12 +9,14 @@
 
 ## 组成
 
-- M7: mqtt(docker:RabbitMQ)
+- M7: M2M(docker:mqtt)
 - M8: cms(docker:wordpress)
 - M9: make(docker:devops)
 
 ## 说明
 
 OS-Q3项目针对云端计算平台，包括各个各个组件功能的实现
+
+运行 install.sh脚本，可以安装docker(基于ubuntu18宿主机)
 
 ![Q3 Logo](docs/Q3.png)
