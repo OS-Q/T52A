@@ -1,22 +1,22 @@
 # OS-Q3(www.OS-Q.com)
 
-[![sites](docs/Q.png)](http://qitas.cn)
+[![sites](qitas/qitas.png)](http://www.os-q.com)
 
 ## 描述
 
-基于容器技术打造云端服务系统平台，包括连接设备/数据管理/内容呈现等
+OS-Q3项目针对云端计算平台，包括各个组件功能定义，组件基于容器技术实现，包括连接设备/数据管理/内容呈现等分类
 
 
 ## 组成
 
-- M7: M2M(docker:mqtt)
-- M8: cms(docker:wordpress)
-- M9: make(docker:devops)
+- M7: 通信组件
+- M8: 数据组件
+- M9: 呈现组件
 
 ## 说明
 
-OS-Q3项目针对云端计算平台，包括各个各个组件功能的实现
+2018-10-15: 规范该仓库和项目目标
 
-运行 install.sh脚本，可以安装docker(基于ubuntu18宿主机)
+---
 
-![Q3 Logo](docs/Q3.png)
+## 为锻造最美之器
