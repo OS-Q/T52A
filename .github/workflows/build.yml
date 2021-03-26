@@ -33,15 +33,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-    - name: Install
-      run: |
-        python -m pip install --upgrade pip
-        pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
-        platformio update
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
+          platformio update
 
-    - name: Tests ${{ matrix.test-platform }}
-      run: |
-        chmod +x buildroot/bin/*
-        chmod +x buildroot/tests/*
-        export PATH=./buildroot/bin/:./buildroot/tests/:${PATH}
-        run_tests . ${{ matrix.test-platform }}
+      - name: Tests ${{ matrix.test-platform }}
+        run: |
+          chmod +x buildroot/bin/*
+          chmod +x buildroot/tests/*
+          export PATH=./buildroot/bin/:./buildroot/tests/:${PATH}
+          run_tests . ${{ matrix.test-platform }}
