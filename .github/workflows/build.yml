@@ -19,9 +19,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: [3.7]
-        test-platform:
-        - esp32
-        - mega2560
+        platform:
+          - esp32
+          - mega2560ext
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -39,9 +39,9 @@ jobs:
           pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
           platformio update
 
-      - name: Tests ${{ matrix.test-platform }}
+      - name: Tests ${{ matrix.platform }}
         run: |
           chmod +x buildroot/bin/*
           chmod +x buildroot/tests/*
           export PATH=./buildroot/bin/:./buildroot/tests/:${PATH}
-          run_tests . ${{ matrix.test-platform }}
+          run_tests . ${{ matrix.platform }}
