@@ -12,7 +12,7 @@ on:
 
 jobs:
   test_builds:
-    name: Run Tests
+    name: Tests
     if: github.repository == 'OS-Q/T52M'
     strategy:
       fail-fast: false
@@ -48,7 +48,7 @@ jobs:
 
       - name: Build ${{ matrix.platform }}
         run: |
-          pio run -e esp32 -d .
+          pio run -e ${{ matrix.platform }} -d .
 
       - name: Upload
         uses: actions/upload-artifact@v2
