@@ -19,20 +19,20 @@ jobs:
         boards:
           - esp32
           - nano32
-        os: [ubuntu-latest]
-        python: [3.7,3.9]
+        # os: [ubuntu-latest]
+        # python: [3.7,3.9]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest #${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: "recursive"
           fetch-depth: 1
 
-      - name: Set up Python ${{ matrix.python }}
+      - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python }}
+          python-version: 3.9
 
       - name: Install
         run: |
@@ -45,7 +45,7 @@ jobs:
           chmod +x buildroot/bin/*
           chmod +x buildroot/tests/*
           export PATH=./buildroot/bin/:./buildroot/tests/:${PATH}
-          run_tests . ${{ matrix.boards }}
+          run_tests . esp32
 
       - name: Build ${{ matrix.boards }}
         id: build
@@ -70,10 +70,10 @@ jobs:
         boards:
           - nano32
           - B52A
-        os: [ubuntu-latest]
-        python: [3.7,3.9]
+        # os: [ubuntu-latest]
+        # python: [3.7,3.9]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest # ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -97,7 +97,7 @@ jobs:
           chmod +x buildroot/bin/*
           chmod +x buildroot/tests/*
           export PATH=./buildroot/bin/:./buildroot/tests/:${PATH}
-          run_tests . ${{ matrix.boards }}
+          run_tests . esp32
 
       - name: Build ${{ matrix.boards }}
         id: build
