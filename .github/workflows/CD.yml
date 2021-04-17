@@ -24,7 +24,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -U https://github.com/OS-Q/S03/releases/latest/download/S03.zip
-        qio platform install https://github.com/OS-Q/T52A/releases/latest/download/T52A.zip
+        qio platform install https://github.com/OS-Q/P52/releases/latest/download/P52.zip
 
     - name: Build
       id: build
