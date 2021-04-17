@@ -122,7 +122,7 @@ jobs:
         if: success()
         run: |
           qio run -e ${{ matrix.boards }} -d . > build/log.txt
-          cp ./.qio/build/${{ matrix.boards }}/*.bin build/
+          # cp ./.qio/build/${{ matrix.boards }}/*.bin build/
           echo "::set-output name=status::success"
 
       - name: Upload
