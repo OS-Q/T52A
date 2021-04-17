@@ -81,7 +81,7 @@ jobs:
         if: steps.build.outputs.status == 'success' && env.UPLOAD_BUILD
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.boards }}_firmware
+          name: ${{ matrix.boards }}_pio_firmware
           path: build/
 
   OSQ:
@@ -121,13 +121,13 @@ jobs:
         id: build
         if: success()
         run: |
-          pio run -e ${{ matrix.boards }} -d . > build/log.txt
-          cp ./.pio/build/${{ matrix.boards }}/*.bin build/
+          qio run -e ${{ matrix.boards }} -d . > build/log.txt
+          cp ./.qio/build/${{ matrix.boards }}/*.bin build/
           echo "::set-output name=status::success"
 
       - name: Upload
         if: steps.build.outputs.status == 'success' && env.UPLOAD_BUILD
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.boards }}_firmware
+          name: ${{ matrix.boards }}_qio_firmware
           path: build/

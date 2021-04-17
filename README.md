@@ -8,6 +8,5 @@
 
 ### [简介](https://github.com/OS-Q/T52A/wiki)
 
-[Marlin](https://github.com/OS-Q/T52A) 用于资源集成编译管理
-
+[Marlin](https://github.com/OS-Q/T52A) 3D Printer Firmware 2.0
 ### [源圈 OS-Q (Open Source & QA) ](http://www.OS-Q.com)
