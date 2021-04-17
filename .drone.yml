@@ -2,13 +2,21 @@ kind: pipeline
 name: default
 
 steps:
-- name: P51
+- name: PIO
   image: python:3
   commands:
   - apt update
   - apt install -y git
   - git submodule update --init --recursive
-  - pip install -U https://github.com/OS-Q/S03/archive/master.zip
-  - qio platform install https://github.com/OS-Q/P51.git
+  - pip install -U https://github.com/platformio/platformio/archive/develop.zip
   - qio run -d .
 
+- name: QIO
+  image: python:3
+  commands:
+  - apt update
+  - apt install -y git
+  - git submodule update --init --recursive
+  - pip install -U https://github.com/OS-Q/S03/releases/latest/download/S03.zip
+  - qio platform install https://github.com/OS-Q/P52/releases/latest/download/P52.zip
+  - qio run -d .
