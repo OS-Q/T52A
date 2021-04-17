@@ -16,9 +16,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform:
+        boards:
           - esp32
-          # - mega2560
+          - nano32
         os: [ubuntu-latest]
         python: [3.7,3.9]
 
@@ -40,26 +40,26 @@ jobs:
           pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
           platformio update
 
-      - name: Tests ${{ matrix.platform }}
+      - name: Tests ${{ matrix.boards }}
         run: |
           chmod +x buildroot/bin/*
           chmod +x buildroot/tests/*
           export PATH=./buildroot/bin/:./buildroot/tests/:${PATH}
-          run_tests . ${{ matrix.platform }}
+          run_tests . ${{ matrix.boards }}
 
-      - name: Build ${{ matrix.platform }}
+      - name: Build ${{ matrix.boards }}
         id: build
         if: github.repository == 'OS-Q/T52A'
         run: |
-          pio run -e ${{ matrix.platform }} -d .
-          cp ./.pio/build/${{ matrix.platform }}/*.bin build/
+          pio run -e ${{ matrix.boards }} -d .
+          cp ./.pio/build/${{ matrix.boards }}/*.bin build/
           echo "::set-output name=status::success"
 
       - name: Upload
         if: steps.build.outputs.status == 'success' && env.UPLOAD_BUILD
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.platform }}_firmware
+          name: ${{ matrix.boards }}_firmware
           path: build/
 
   OSQ:
@@ -69,6 +69,7 @@ jobs:
       matrix:
         boards:
           - nano32
+          - B52A
         os: [ubuntu-latest]
         python: [3.7,3.9]
 
@@ -91,7 +92,14 @@ jobs:
           pip install -U https://github.com/OS-Q/S03/releases/latest/download/S03.zip
           qio platform install https://github.com/OS-Q/P52/releases/latest/download/P52.zip
 
-      - name: Build
+      - name: Tests ${{ matrix.boards }}
+        run: |
+          chmod +x buildroot/bin/*
+          chmod +x buildroot/tests/*
+          export PATH=./buildroot/bin/:./buildroot/tests/:${PATH}
+          run_tests . ${{ matrix.boards }}
+
+      - name: Build ${{ matrix.boards }}
         id: build
         if: success()
         run: |
@@ -103,5 +111,5 @@ jobs:
         if: steps.build.outputs.status == 'success' && env.UPLOAD_BUILD
         uses: actions/upload-artifact@v2
         with:
-          name: T52A_${{ matrix.boards }}_firmware
+          name: ${{ matrix.boards }}_firmware
           path: build/
