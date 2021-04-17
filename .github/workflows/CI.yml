@@ -12,25 +12,27 @@ env:
 
 jobs:
   platformio:
-    name: Tests
+    name: PIO Tests
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        python-version: [3.7]
         platform:
           - esp32
           # - mega2560
+        os: [ubuntu-latest]
+        python: [3.7,3.9]
 
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: "recursive"
-      - name: Set up Python ${{ matrix.python-version }}
+          fetch-depth: 1
+
+      - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python }}
 
       - name: Install
         run: |
@@ -46,20 +48,31 @@ jobs:
           run_tests . ${{ matrix.platform }}
 
       - name: Build ${{ matrix.platform }}
+        id: build
         if: github.repository == 'OS-Q/T52A'
         run: |
           pio run -e ${{ matrix.platform }} -d .
           cp ./.pio/build/${{ matrix.platform }}/*.bin build/
+          echo "::set-output name=status::success"
 
       - name: Upload
+        if: steps.build.outputs.status == 'success' && env.UPLOAD_BUILD
         uses: actions/upload-artifact@v2
         with:
-          name: upload-firmware
+          name: ${{ matrix.platform }}_firmware
           path: build/
 
   OSQ:
-    name: Tests
-    runs-on: ubuntu-latest #${{ matrix.os }}
+    name: QIO Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        boards:
+          - nano32
+        os: [ubuntu-latest]
+        python: [3.7,3.9]
+
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -82,13 +95,13 @@ jobs:
         id: build
         if: success()
         run: |
-          mkdir build
-          pio run -d . > build/log.txt
+          pio run -e ${{ matrix.boards }} -d . > build/log.txt
+          cp ./.pio/build/${{ matrix.boards }}/*.bin build/
           echo "::set-output name=status::success"
 
       - name: Upload
         if: steps.build.outputs.status == 'success' && env.UPLOAD_BUILD
         uses: actions/upload-artifact@v2
         with:
-          name: T52A
+          name: T52A_${{ matrix.boards }}_firmware
           path: build/
