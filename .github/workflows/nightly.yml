@@ -1,0 +1,84 @@
+name: nightly
+
+on:
+  schedule:
+    - cron: '0 15 * * *'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: [3.7,3.9]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
+          fetch-depth: 1
+
+      - name: Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -U https://github.com/OS-Q/S03/archive/master.zip
+          pio platform install https://github.com/OS-Q/P52/releases/latest/download/P52.zip
+
+      - name: Build
+        id: build
+        if: success() && github.repository == 'OS-Q/T52A'
+        run: |
+          pio run -d . > build/log.txt
+          echo "::set-output name=status::success"
+
+  platformio:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: [3.7,3.9]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
+          fetch-depth: 1
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Checkout MarlinFirmware
+        uses: actions/checkout@v2
+        with:
+          repository: MarlinFirmware/Marlin
+          token: ${{ secrets.OSQ_REPO_TOKEN }}
+          path: MarlinFirmware
+
+      - name: Install PlatformIO
+        working-directory: MarlinFirmware
+        run: |
+          pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
+          platformio update
+
+      - name: Run Tests
+        working-directory: MarlinFirmware
+        run: |
+          # Inline tests script
+          chmod +x buildroot/bin/*
+          chmod +x buildroot/tests/*
+          export PATH=./buildroot/bin/:./buildroot/tests/:${PATH}
+          run_tests . esp32
+
+      - name: Build MarlinFirmware
+        working-directory: MarlinFirmware
+        run: |
+          pio run -e esp32 -d .
