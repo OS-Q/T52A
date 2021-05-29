@@ -71,7 +71,7 @@ jobs:
 
       - name: Build ${{ matrix.boards }}
         id: build
-        if: github.repository == 'OS-Q/T52A'
+        if: github.repository == 'OS-Q/W511A'
         run: |
           pio run -e ${{ matrix.boards }} -d .
           cp ./.pio/build/${{ matrix.boards }}/*.bin build/
@@ -111,11 +111,11 @@ jobs:
           python-version: 3.9
 
       - name: Install
-        if: github.repository == 'OS-Q/T52A'
+        if: github.repository == 'OS-Q/W511A'
         run: |
           python -m pip install --upgrade pip
-          pip install -U https://github.com/OS-Q/S03/releases/latest/download/S03.zip
-          qio platform install https://github.com/OS-Q/P52/releases/latest/download/P52.zip
+          pip install -U https://github.com/OS-Q/M03/releases/latest/download/qio.zip
+          qio platform install https://github.com/OS-Q/P511/archive/master.zip
 
       - name: Build ${{ matrix.boards }}
         id: build

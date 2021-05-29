@@ -36,8 +36,8 @@ jobs:
           name: "Install"
           command: |
             python -m pip install --upgrade pip
-            pip install -U https://github.com/OS-Q/S03/releases/latest/download/S03.zip
-            qio platform install https://github.com/OS-Q/P52/releases/latest/download/P52.zip
+            pip install -U https://github.com/OS-Q/M03/releases/latest/download/qio.zip
+            qio platform install https://github.com/OS-Q/P511/archive/master.zip
       - run:
           name: "Build"
           command: |
