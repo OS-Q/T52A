@@ -94,7 +94,6 @@ jobs:
       matrix:
         boards:
           - nano32
-          - B52A
         # os: [ubuntu-latest]
         # python: [3.7,3.9]
 
@@ -121,7 +120,7 @@ jobs:
         id: build
         if: success()
         run: |
-          qio run -e ${{ matrix.boards }} -d . > build/log.txt
+          qio run -e ${{ matrix.boards }} -d .
           # cp ./.qio/build/${{ matrix.boards }}/*.bin build/
           echo "::set-output name=status::success"
 
